@@ -208,3 +208,10 @@ __marimo__/
 
 
 id_rsa
+
+.terraform/
+
+*.tfstate
+*.tfstate.backup
+
+*.tfvars

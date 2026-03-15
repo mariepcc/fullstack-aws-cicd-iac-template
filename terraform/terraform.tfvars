@@ -9,3 +9,4 @@ tags = {
   Environment = "dev"
   Project     = "ECR-EC2-Deployment"
 }
+bucket_name = "fastapi-terraform-state-bucket-2026"
