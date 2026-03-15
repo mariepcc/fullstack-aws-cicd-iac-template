@@ -23,3 +23,8 @@ def get_data():
         "project": "AWS CI/CD and IaC Template",
         "status": "connected",
     }
+
+
+@app.get("/api/health")
+def health_check():
+    return {"status": "healthy"}
