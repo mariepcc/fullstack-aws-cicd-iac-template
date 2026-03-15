@@ -1,0 +1,11 @@
+.git
+.gitignore
+id_rsa
+id_rsa.pub
+terraform/
+.terraform/
+terraform.tfstate*
+*.tfvars
+__pycache__/
+*.pyc
+.env
