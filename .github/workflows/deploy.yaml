@@ -8,6 +8,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      BACKEND_PATH: backend/
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -29,7 +32,9 @@ jobs:
           ECR_REPO: ${{ secrets.ECR_REPO }}
           IMAGE_TAG: latest
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG \
+            -f $BACKEND_PATH/Dockerfile \
+            $BACKEND_PATH
           docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
 
       - name: Deploy to EC2 via SSH
