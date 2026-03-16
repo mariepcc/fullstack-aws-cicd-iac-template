@@ -1,0 +1,14 @@
+services:
+  backend:
+    image: ${ECR_REGISTRY}/${ECR_BACKEND}:latest
+    expose:
+      - "8000" 
+    restart: always
+
+  frontend:
+    image: ${ECR_REGISTRY}/${ECR_FRONTEND}:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always

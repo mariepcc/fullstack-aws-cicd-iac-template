@@ -1,6 +1,6 @@
 module "ecr" {
   source       = "./module/ecr"
-  repo_name    = var.repo_name
+  project_name    = var.project_name
 }
 
 module "ec2" {

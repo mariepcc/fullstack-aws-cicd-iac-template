@@ -1,5 +1,5 @@
 aws_region   = "eu-north-1"
-repo_name    = "fastapi-ecr"
+project_name    = "app"
 
 instance_type     = "t3.micro"
 key_name          = "deployer_key"

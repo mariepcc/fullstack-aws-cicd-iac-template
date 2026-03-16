@@ -29,13 +29,24 @@ jobs:
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPO: ${{ secrets.ECR_REPO }}
+          ECR_BACKEND: ${{ secrets.ECR_BACKEND }}
+          ECR_FRONTEND: ${{ secrets.ECR_FRONTEND }}
           IMAGE_TAG: latest
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG \
-            -f $BACKEND_PATH/Dockerfile \
-            $BACKEND_PATH
-          docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/$ECR_BACKEND:$IMAGE_TAG -f backend/Dockerfile ./backend
+          docker push $ECR_REGISTRY/$ECR_BACKEND:$IMAGE_TAG
+          
+          docker build -t $ECR_REGISTRY/$ECR_FRONTEND:$IMAGE_TAG -f frontend/Dockerfile ./frontend
+          docker push $ECR_REGISTRY/$ECR_FRONTEND:$IMAGE_TAG
+          
+      - name: Copy docker-compose.yml to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "~/"
 
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -47,9 +58,13 @@ jobs:
             echo "Authenticating to ECR..."
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
+            echo "ECR_REGISTRY=${{ secrets.ECR_REGISTRY }}" > .env
+            echo "ECR_BACKEND=${{ secrets.ECR_BACKEND }}" >> .env
+            echo "ECR_FRONTEND=${{ secrets.ECR_FRONTEND }}" >> .env
+
             docker --version
-            docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}:latest
-            docker stop fastapi-app || true
-            docker rm fastapi-app || true
-            docker run -d --name fastapi-app -p 80:8000 ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}:latest
+            docker-compose pull
+            docker-compose up -d --remove-orphans
             docker ps
+
+            echo "App live at: http://${{ secrets.EC2_HOST }}"

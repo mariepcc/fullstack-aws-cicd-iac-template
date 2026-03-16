@@ -1,6 +1,11 @@
-output "ecr_repo_url" {
-  description = "The URL of the created ECR repository"
-  value       = module.ecr.repository_url
+output "ecr_backend_repo_url" {
+  description = "The URL of the created ECR backend repository"
+  value       = module.ecr.backend_repository_url
+}
+
+output "ecr_frontend_repo_url" {
+  description = "The URL of the created ECR frontend repository"
+  value       = module.ecr.frontend_repository_url
 }
 
 output "key_name" {
