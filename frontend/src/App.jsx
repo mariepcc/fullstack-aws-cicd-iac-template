@@ -5,7 +5,7 @@ function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch("https://secure-incident.pl:8000/api/data")
+    fetch("/api/data")
       .then((res) => res.json())
       .then((json) => setData(json))
       .catch((err) => console.error("Connection to API failed:", err));

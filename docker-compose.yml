@@ -1,8 +1,8 @@
 services:
   backend:
     image: ${ECR_REGISTRY}/${ECR_BACKEND}:latest
-    ports:
-      - "8000:8000" 
+    expose:
+      - "8000" 
     restart: always
 
   frontend:
