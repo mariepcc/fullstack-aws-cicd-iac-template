@@ -12,7 +12,7 @@ def read_root():
 @app.get("/data")
 def get_data():
     return {
-        "project": "AWS CI/CD and IaC Template",
+        "project": "Fullstack FastAPI-React Template with AWS CI/CD and IaC",
         "status": "connected",
     }
 
