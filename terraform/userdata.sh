@@ -1,7 +1,7 @@
 #!/bin/bash
 apt-get update -y
 apt-get upgrade -y
-apt-get install -y docker.io awscli amazon-ecr-credential-helper
+apt-get install -y docker.io docker-compose awscli amazon-ecr-credential-helper
 
 systemctl start docker
 systemctl enable docker
